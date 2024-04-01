@@ -78,23 +78,56 @@ Make sure you have your LambdaTest credentials with you to run test automation s
 
 You can generate capabilities for your test requirements with the help of our [Desired Capability Generator](https://www.lambdatest.com/capabilities-generator/?utm_source=github&utm_medium=repo&utm_campaign=robot-selenium-sample).
 
+For Smart UI please refer to the following doc [Smart-UI](https://www.lambdatest.com/support/docs/selenium-visual-regression/).
+
+*Capabilities Reference In Robot For Smart UI*
+
+```
+*** Settings ***
+Library  SeleniumLibrary
+Library  LambdaTestStatus.py
+
+*** Variables ***
+${BROWSER}          ${ROBOT_BROWSER}
+&{lt_options}       browserName=${browserName}      name=RobotFramework Lambda Test    buildName=Robot Build    smartUI.project=RobotFramework#pullpage3    project=Untitled#4    selenium_version=4.12.0
+${REMOTE_URL}       http://username:acesskey@hub.lambdatest.com/wd/hub
+${TIMEOUT}          30000
+
+*** Keywords ***
+Open test browser
+    [Timeout]   ${TIMEOUT}
+    ${options}=    Evaluate    sys.modules['selenium.webdriver'].${BROWSER}Options()    sys, selenium.webdriver
+    Call Method    ${options}    set_capability    LT:Options    ${lt_options}
+    Open Browser    https://www.lambdatest.com/support/docs/selenium-visual-regression/
+    ...    browser=${BROWSER}
+    ...    remote_url=${REMOTE_URL}
+    ...    options=${options}
+
+Close test browser
+    Run keyword if    '${REMOTE_URL}' != ''
+    ...    Report Lambdatest Status
+    ...    ${TEST_NAME}
+    ...    ${TEST_STATUS}
+    Close All Browsers
+```
+
+
+*How to take screenshot*
+
+
+```
+Execute JavaScript    smartui.takeScreenshot=screenshot_name
+Execute JavaScript    smartui.takeFullPageScreenshot=screenshot_name #only works in case of chrome and above selenium 4.0.0
+```
+
 ### Executing the Test 
 
 **Step 4:** Please execute the command below to run your tests:
 ```bash
-make test_Windows_10_chrome_latest
+robot  --output NONE --report NONE --log NONE --variable browserName:Chrome --variable version:latest --variable ROBOT_BROWSER:Chrome Tests/sample_test.robot 
 ```
 Your test results would be displayed on the test console (or command-line interface if you are using terminal/cmd) and on LambdaTest automation dashboard. [LambdaTest Automation Dashboard](https://automation.lambdatest.com/build/?utm_source=github&utm_medium=repo&utm_campaign=robot-selenium-sample) will help you view all your text logs, screenshots and video recording for your entire automation tests.
 
-## Running Your Parallel Tests Using Robot 
-
-To run parallel tests using TestNG, execute the below commands in the terminal:
-
-```bash
-make run_all_in_parallel
-```
-
-# Testing Locally Hosted Or Privately Hosted Projects
 
 You can test your locally hosted or privately hosted projects with LambdaTest Selenium grid using LambdaTest Tunnel. All you would have to do is set up an SSH tunnel using tunnel and pass toggle `tunnel = True` via desired capabilities. LambdaTest Tunnel establishes a secure SSH protocol based tunnel that allows you in testing your locally hosted or privately hosted pages, even before they are live.
 
@@ -123,7 +156,7 @@ Once you are able to connect **LambdaTest Tunnel** successfully, you would just 
 
 **Tunnel Capability**
 
-```python
+```
 "tunnel" = true
 ```
 
