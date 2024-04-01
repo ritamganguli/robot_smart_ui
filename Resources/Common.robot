@@ -5,7 +5,7 @@ Library  LambdaTestStatus.py
 *** Variables ***
 ${BROWSER}          ${ROBOT_BROWSER}
 &{lt_options}       browserName=${browserName}      name=RobotFramework Lambda Test    buildName=Robot Build    smartUI.project=RobotFramework#pullpage3    project=Untitled#4    selenium_version=4.12.0
-${REMOTE_URL}       http://shubhamr:dl8Y8as59i1YyGZZUeLF897aCFvIDmaKkUU1e6RgBmlgMLIIhh@hub.lambdatest.com/wd/hub
+${REMOTE_URL}       http://username:acesskey@hub.lambdatest.com/wd/hub
 ${TIMEOUT}          30000
 
 *** Keywords ***
